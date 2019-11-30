@@ -1,32 +1,185 @@
-  // This is our API key
-  var APIKey = "166a433c57516f51dfab1f7edaed8413";
+$(document).ready(function(){ 
 
-  // Here we are building the URL we need to query the database
-  var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
-      "q=Denver,Burundi&units=imperial&appid=" + APIKey;
-
-  // Here we run our AJAX call to the OpenWeatherMap API
-  $.ajax({
-      url: queryURL,
-      method: "GET"
-  })
-      // We store all of the retrieved data inside of an object called "response"
-      .then(function (response) {
-
-          // Log the queryURL
-          console.log(queryURL);
-
-          // Log the resulting object
-          console.log(response);
-
-          // Transfer content to HTML
-          $(".city").html("<h1>" + response.name + " Weather Details</h1>");
-          $(".wind").text("Wind Speed: " + response.wind.speed);
-          $(".humidity").text("Humidity: " + response.main.humidity);
-          $(".temp").text("Temperature (F) " + response.main.temp);
-
-          // Log the data in the console as well
-          console.log("Wind Speed: " + response.wind.speed);
-          console.log("Humidity: " + response.main.humidity);
-          console.log("Temperature (F): " + response.main.temp);
-      });
+    // This is our API Key
+    var APIKey = "166a433c57516f51dfab1f7edaed8413";
+    
+    var cityInput = document.querySelector(".search");
+    var previous = document.querySelector("#lastResults");
+    var cities = [];
+    
+    
+    citySearch();
+    init();
+    
+    function renderLocation(){
+         lastResults.innerHTML = "";
+    
+        for(var i = 0; i < cities.length; i++){
+            var city = cities[i];
+    
+            var li = document.createElement("li");
+            li.textContent=city;
+            li.setAttribute("data-index", i);
+    
+            lastResults.appendChild(li);
+    
+        }
+    }
+    
+    function init() {
+    
+        var storedCities = JSON.parse(localStorage.getItem("cities"));
+        if(storedCities !== null){
+            cities = storedCities;
+        }
+        renderLocation();
+    }
+    
+    function storeCities(){
+        localStorage.setItem("cities", JSON.stringify(cities))
+    }
+      
+    
+    
+    function citySearch(){
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Denver,US&units=imperial&appid=" + APIKey;
+        var forecastURL = "https://api.openweathermap.org/data/2.5/forecast/daily?q=Denver,US&units=imperial&appid=" + APIKey;
+        
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response){
+            console.log(queryURL);
+            console.log(response);
+            $(".cityName").text("Current Weather for " + response.name);
+            $(".icon").append($('<img>',{id:"icon", src:"http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png" }));
+            $(".temp").text("Temperature (F) " + response.main.temp);
+            $(".humid").text("Humidity: " + response.main.humidity + " %");
+            $(".wind").text("Wind Speed: " + response.wind.speed + " mph");
+    
+        });
+    
+         
+         $.ajax({
+             url: forecastURL,
+             method: "GET"
+            }).then(function(response){
+    
+            console.log(forecastURL);
+            console.log(response);
+            $(".day1date").html(moment().add(1, "day").format("MMM Do YYYY"));
+            $("#day1Icon").append($('<img>',{ id:"icon1", src:"http://openweathermap.org/img/wn/" + response.list[1].weather[0].icon + "@2x.png" }));
+            $(".day1Temp").text("Temperature (F)  " + response.list[1].temp.day);
+            $(".day1Hum").text("Humidity " + response.list[1].humidity + " %");
+    
+            $(".day2date").html(moment().add(2, "day").format("MMM Do YYYY"));
+            $(".day2Icon").append($('<img>',{ id:"icon2", src:"http://openweathermap.org/img/wn/" + response.list[2].weather[0].icon + "@2x.png" }));
+            $(".day2Temp").text("Temperature (F)  " + response.list[2].temp.day);
+            $(".day2Hum").text("Humidity " + response.list[2].humidity + " %");
+    
+            $(".day3date").html(moment().add(3, "day").format("MMM Do YYYY"));
+            $(".day3Icon").append($('<img>',{ id:"icon3", src:"http://openweathermap.org/img/wn/" + response.list[3].weather[0].icon + "@2x.png" }));
+            $(".day3Temp").text("Temperature (F)  " + response.list[3].temp.day);
+            $(".day3Hum").text("Humidity " + response.list[3].humidity + " %");
+    
+            $(".day4date").html(moment().add(4, "day").format("MMM Do YYYY"));
+            $(".day4Icon").append($('<img>',{ id:"icon4", src:"http://openweathermap.org/img/wn/" + response.list[4].weather[0].icon + "@2x.png" }));
+            $(".day4Temp").text("Temperature (F)  " + response.list[4].temp.day);
+            $(".day4Hum").text("Humidity " + response.list[4].humidity + " %");
+    
+            $(".day5date").html(moment().add(5, "day").format("MMM Do YYYY"));
+            $(".day5Icon").append($('<img>',{ id:"icon5", src:"http://openweathermap.org/img/wn/" + response.list[5].weather[0].icon + "@2x.png" }));
+            $(".day5Temp").text("Temperature (F)  " + response.list[5].temp.day);
+            $(".day5Hum").text("Humidity " + response.list[5].humidity + " %");
+        });
+     
+    }
+    
+    
+    $("#searchBtn").on("click", function(event){
+        event.preventDefault();
+        var city = $(".search").val();
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + ",US&units=imperial&appid=" + APIKey;
+        var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + ",US&units=imperial&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response){
+            console.log(queryURL);
+            console.log(response);
+            $(".cityName").text("The current weather for the city of " + response.name + " :");
+            $("#icon").remove();
+            $(".icon").append($('<img>',{id:"icon", src:"http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png" }));
+            $(".temp").text("The temperature is currently at " + response.main.temp + " degrees fahrenheit.");
+            $(".humid").text("The humidity is at approximately " + response.main.humidity + " %");
+            $(".wind").text("The wind speed is currently at " + response.wind.speed + " mph");
+        });
+    
+    });
+    
+    $("#searchBtn").on("click", function(event){
+        event.preventDefault();
+        var city = $(".search").val();
+        
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + ",US&units=imperial&appid=" + APIKey;
+        var forecastURL = "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + ",US&units=imperial&appid=" + APIKey;
+    
+        
+        
+        $.ajax({
+            url: forecastURL,
+            method: "GET"
+        }).then(function(response){
+            console.log(forecastURL);
+            console.log(response);
+            
+            $(".day1date").html(moment().add(1, "day").format("MMM Do YYYY"));
+            $("#icon1").remove();
+            $("#day1Icon").append($('<img>',{ id:"icon1", src:"http://openweathermap.org/img/wn/" + response.list[1].weather[0].icon + "@2x.png" }));
+            $(".day1Temp").text("Temperature (F)  " + response.list[1].temp.day);
+            $(".day1Hum").text("Humidity " + response.list[1].humidity + " %");
+            
+            $(".day2date").html(moment().add(2, "day").format("MMM Do YYYY"));
+            $("#icon2").remove();
+            $(".day2Icon").append($('<img>',{ id:"icon2", src:"http://openweathermap.org/img/wn/" + response.list[2].weather[0].icon + "@2x.png" }));
+            $(".day2Temp").text("Temperature (F)  " + response.list[2].temp.day);
+            $(".day2Hum").text("Humidity " + response.list[2].humidity + " %");
+            
+            $(".day3date").html(moment().add(3, "day").format("MMM Do YYYY"));
+            $("#icon3").remove();
+            $(".day3Icon").append($('<img>',{ id:"icon3", src:"http://openweathermap.org/img/wn/" + response.list[3].weather[0].icon + "@2x.png" }));
+            $(".day3Temp").text("Temperature (F)  " + response.list[3].temp.day);
+            $(".day3Hum").text("Humidity " + response.list[3].humidity + " %");
+            
+            $(".day4date").html(moment().add(4, "day").format("MMM Do YYYY"));
+            $("#icon4").remove();
+            $(".day4Icon").append($('<img>',{ id:"icon4", src:"http://openweathermap.org/img/wn/" + response.list[4].weather[0].icon + "@2x.png" }));
+            $(".day4Temp").text("Temperature (F)  " + response.list[4].temp.day);
+            $(".day4Hum").text("Humidity " + response.list[4].humidity + " %");
+    
+            $(".day5date").html(moment().add(5, "day").format("MMM Do YYYY"));
+            $("#icon5").remove();
+            $(".day5Icon").append($('<img>',{ id:"icon5", src:"http://openweathermap.org/img/wn/" + response.list[5].weather[0].icon + "@2x.png" }));
+            $(".day5Temp").text("Temperature (F)  " + response.list[5].temp.day);
+            $(".day5Hum").text("Humidity " + response.list[5].humidity + " %");  
+       
+        });
+    });
+    
+     
+    $("#searchBtn").on("click", function(event){
+        event.preventDefault();
+        
+        var cityText = cityInput.value.trim();
+    
+        if(cityText === ""){
+            return;
+        }
+        cities.push(cityText);
+        cityInput.value = "";
+    
+        storeCities();
+        renderLocation();
+    });   
+    
+});

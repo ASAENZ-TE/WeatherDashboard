@@ -1,79 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title> Weather Dashboard </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  </head>
+  <body>
     <section class="hero content has-text-centered">
-            <div class="hero-body">
-              <div class="container">
-                <h1 class="title">
-                  Weather Dashboard
-                </h1>
-                <h2 class="subtitle">
-                    Plan Your Trips Ahead of Time!
-                </h2>
-              </div>
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              The Weather Dashboard!
+            </h1>
+            <h2 class="subtitle">
+                Plan Your Trips Ahead of Time!
+            </h2>
+          </div>
+        </div>
+    </section>
+
+
+    <div class="tile is-parent">
+        <article class="tile is-child notification is-danger">
+            <div class="content has-text-centered">
+
+                <div class="searchArea">
+                    <h1> Plug in your destination! </h1>
+                    <input type="text" class="search input is-rounded is-warning" placeholder="Where ya' goin'?"/>
+                    <br>
+                    <br>
+                    <button type="button" class="button is-warning is-rounded" id="searchBtn"> Show Me The Weather!</button>
+                    <br />
+                </div>
+                
             </div>
-          </section>
-
-
-
-    <div class="container content has-text-centered"> 
-        <div class="notification"> 
-
-            <div class="columns is-mobile">
-                <div class="column is-one-third">
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-rounded is-info" type="text" placeholder="Where ya' goin'?">
-                      </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child notification is-success">
-                          <div class="content">
-                            <p class="title"></p>
-
-                                  <div class="content">
-                                  </div>
-
-                          </div>
-                        </article>
-                    </div>
-                </div>
-              </div>
-                <div class="column is-two-thirds">
-
-                    <div class="tile">
-
-                                <div class="tile is-parent is-vertical">
-                                  <article class="tile is-child notification is-primary">
-                                    <p class="title"> Selected City </p>
-                                    <div class="city"></div>
-                                    <div class="wind"></div>
-                                    <div class="humidity"></div>
-                                    <div class="temp"></div>
-                                  </article>
-                                  <article class="tile is-child notification is-warning">
-                                    <p class="title"> Five Day Forecast </p>
-                                    <p class="subtitle"> forecast goes here </p>
-                                  </article>
-                                </div>
-                       
-
-                    </div>
-                </div>
-                  
-      <!-- Retrieved data will be dumped here -->
-        
+        </article>
     </div>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            <script src="script.js"></script>
 
+    <div class="tile is-parent">
+        <article class="tile is-child notification is-warning">
+            <div class="content">
 
-</body>
+                <div class="list" id="lastResults">
+                    <ul class="list-group2"> 
+                    </ul>        
+                  </div>
+                
+            </div>
+        </article>
+    </div>
+
+    <div class="tile is-parent">
+            <article class="tile is-child notification is-danger">
+                <div class="content has-text-centered">
+    
+                    <div class="card" id="currentCity">
+                        <div class="card-header">
+                          <h4 class="cityName"></h4>
+                
+                        </div>
+                        <br> 
+                          <div class="icon"> </div>
+                          <br>
+                          <p class="temp"></p>
+                          <br>
+                          <p class="humid"></p>
+                          <br>
+                          <p class="wind"></p>
+                          
+                    </div> 
+                    
+                </div>
+            </article>
+        </div>
+
+        <div class="tile is-parent">
+                <article class="tile is-child notification is-warning">
+                    <div class="content has-text-centered">
+
+                        <h3 class="forecast"> 5-Day Forecast: </h3>
+                            
+                        <div class="forecastContainer">
+                            <div class="columns is-mobile">
+
+                                    
+                                <div class="column is-one-fifth">
+                                    <div class="card text-white bg-primary mb-3" id="forecastCard" style="max-width: 13rem;">
+                                                <h5 class="day1date"></h5> 
+                                                <div id="day1Icon"></div>                  
+                                        <div class="day1Temp"></div>
+                                        <br>
+                                        <div class="day1Hum"></div> 
+                                        <br>           
+                                    </div>
+                                </div>
+                                    
+                                <div class="column is-one-fifth">
+                                        <div class="card text-white bg-primary mb-3" id="forecastCard2" style="max-width: 13rem;">
+                                            <h5 class="day2date"></h5>                  
+                                            <div class="day2Icon"></div>
+                                            <div class="day2Temp"></div>
+                                            <br>
+                                            <div class="day2Hum"></div> 
+                                            <br>           
+                                        </div>
+                                </div>
+                                        
+                                <div class="column is-one-fifth">
+                                        <div class="card text-white bg-primary mb-3" id="forecastCard3" style="max-width: 13rem;">
+                                            <h5 class="day3date"></h5>                    
+                                            <div class="day3Icon"></div>
+                                            <div class="day3Temp"></div>
+                                            <br>
+                                            <div class="day3Hum"></div> 
+                                            <br>           
+                                        </div>
+                                </div>
+
+                                <div class="column is-one-fifth">
+                                    <div class="card text-white bg-primary mb-3" id="forecastCard4" style="max-width: 13rem;">
+                                            <h5 class="day4date"></h5>                  
+                                            <div class="day4Icon"></div>
+                                            <div class="day4Temp"></div>
+                                            <br>
+                                            <div class="day4Hum"></div> 
+                                            <br>           
+                                        </div>
+                                </div>
+                                        
+                                <div class="column is-one-fifth">
+                                    <div class="card text-white bg-primary mb-3" id="forecastCard5" style="max-width: 13rem;">
+                                            <h5 class="day5date"></h5>                    
+                                            <div class="day5Icon"></div>
+                                            <div class="day5Temp"></div>
+                                            <br>
+                                            <div class="day5Hum"></div> 
+                                            <br>           
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                            
+                </div>
+            </article>
+        </div>
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script type="text/javascript" src="scripts.js"></script>
+  </body>
 </html>
